@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 
 export default function LoginPage() {
   const router = useRouter();
-  const form = useRef();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -29,15 +27,8 @@ export default function LoginPage() {
   };
 
   /**
-   * Generates a random 6-digit verification code.
-   * @returns {string} A 6-digit code.
-   */
-  const generateVerificationCode = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  };
-
-  /**
-   * Submits the login form, generates a verification code, and sends it via email.
+   * Submits the login form with email and password.
+   * Backend will send OTP to email.
    * @param {React.FormEvent} e - The form submission event.
    */
   const handleSubmit = async (e) => {
@@ -46,55 +37,32 @@ export default function LoginPage() {
     setError('');
 
     try {
-      // Generate 6-digit verification code
-      const verificationCode = generateVerificationCode();
-      
-      // Create hidden inputs for verification code
-      const codeInput = document.createElement('input');
-      codeInput.type = 'hidden';
-      codeInput.name = 'passcode';
-      codeInput.value = verificationCode;
-      form.current.appendChild(codeInput);
+      // Call backend login endpoint
+      const response = await fetch('http://localhost:8080/api/clinic/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      });
 
-      // Log what we're sending
-      const formData = new FormData(form.current);
-      console.log('=== Sending Email ===');
-      console.log('OTP:', verificationCode);
-      console.log('Email:', formData.get('email'));
-      console.log('All form fields:');
-      for (let [key, value] of formData.entries()) {
-        console.log(`  ${key}: ${value}`);
-      }
+      const data = await response.text();
 
-      // Send verification code via EmailJS using sendForm
-      const emailResponse = await emailjs.sendForm(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        form.current,
-        {
-          publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-        }
-      );
-
-      // Remove the temporary input
-      form.current.removeChild(codeInput);
-
-      console.log('Email sent successfully!', emailResponse);
-
-      if (emailResponse.status === 200) {
-        // Email sent successfully, store credentials and code in sessionStorage
-        sessionStorage.setItem('loginEmail', formData.get('email'));
-        sessionStorage.setItem('loginPassword', formData.get('password'));
-        sessionStorage.setItem('verificationCode', verificationCode);
+      if (response.ok) {
+        // OTP sent successfully, store email and redirect to verification
+        sessionStorage.setItem('loginEmail', formData.email);
         
-        // Redirect to verification page using Next.js router
-        router.push('/clinic/auth/login/verification');
+        // Redirect to verification page
+        router.push('/auth/login/verification');
       } else {
-        setError('Failed to send verification code. Please try again.');
+        setError(data || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
-      setError('Failed to send verification email. Please check your email address.');
-      console.error('Email sending error:', error);
+      setError('Network error. Please check your connection and try again.');
+      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }
@@ -144,7 +112,7 @@ export default function LoginPage() {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="bg-white/80 backdrop-blur-xl py-10 px-8 shadow-2xl rounded-3xl border border-white/20 relative"
         >
-          <form ref={form} className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
@@ -272,7 +240,7 @@ export default function LoginPage() {
             >
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link href="/clinic/auth/register" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
+                <Link href="/auth/register" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
                   Sign up here
                 </Link>
               </p>
