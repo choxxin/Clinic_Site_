@@ -245,7 +245,7 @@ export default function AppointmentDetailModal({ appointment, isOpen, onClose, o
                     </svg>
                     Patient Information
                   </h3>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                     <div className="bg-white p-3 rounded-lg shadow-sm">
                       <p className="text-gray-600 font-medium mb-1">Name</p>
                       <p className="font-bold text-gray-900">{appointment.patientName}</p>
@@ -254,6 +254,19 @@ export default function AppointmentDetailModal({ appointment, isOpen, onClose, o
                       <p className="text-gray-600 font-medium mb-1">Contact</p>
                       <p className="font-bold text-gray-900">{appointment.patientContactNo}</p>
                     </div>
+                    {appointment.patientReportUrl && (
+                      <div className="bg-white p-3 rounded-lg shadow-sm break-words">
+                        <p className="text-gray-600 font-medium mb-1">Patient Report</p>
+                        <a
+                          href={appointment.patientReportUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium break-all"
+                        >
+                          View Report
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
 

@@ -65,6 +65,19 @@ const AppointmentCard = ({ appointment, onClick }) => {
           <p className="text-sm text-gray-500 mt-1 font-medium">
             ID: {appointment.patientId} • {appointment.patientContactNo}
           </p>
+          {appointment.patientReportUrl && (
+            <p className="text-sm mt-2">
+              <a
+                href={appointment.patientReportUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline font-medium break-all"
+                onClick={(e) => e.stopPropagation()} // prevent card click from triggering when link clicked
+              >
+                View Patient Report
+              </a>
+            </p>
+          )}
         </div>
         <motion.div 
           whileHover={{ rotate: 360 }}
