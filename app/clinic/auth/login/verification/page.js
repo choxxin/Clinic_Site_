@@ -8,28 +8,22 @@ import { motion } from 'framer-motion';
 export default function VerificationPage() {
   const router = useRouter();
   const [verificationCode, setVerificationCode] = useState('');
-  const [storedCode, setStoredCode] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resendLoading, setResendLoading] = useState(false);
 
   useEffect(() => {
-    // Retrieve stored data from sessionStorage
+    // Retrieve stored email from sessionStorage
     const loginEmail = sessionStorage.getItem('loginEmail');
-    const loginPassword = sessionStorage.getItem('loginPassword');
-    const storedVerificationCode = sessionStorage.getItem('verificationCode');
 
-    if (!loginEmail || !loginPassword || !storedVerificationCode) {
-      // If no stored data, redirect back to login
-      router.push('/clinic/auth/login');
+    if (!loginEmail) {
+      // If no stored email, redirect back to login
+      router.push('/auth/login');
       return;
     }
 
     setEmail(loginEmail);
-    setPassword(loginPassword);
-    setStoredCode(storedVerificationCode);
   }, [router]);
 
   /**
@@ -45,7 +39,7 @@ export default function VerificationPage() {
   };
 
   /**
-   * Verifies the entered code and proceeds with login if correct.
+   * Verifies the entered OTP code with backend.
    * @param {React.FormEvent} e - The form submission event.
    */
   const handleVerify = async (e) => {
@@ -54,35 +48,28 @@ export default function VerificationPage() {
     setError('');
 
     try {
-      // Check if entered code matches stored code
-      if (verificationCode === storedCode) {
-        // Code matches, proceed with actual login
-        const response = await fetch('http://localhost:8080/api/clinic/auth/login', {
-          method: 'POST',
-          credentials: 'include', // Critical for sending/receiving cookies
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password
-          }),
-        });
+      // Call backend verify-otp endpoint
+      const response = await fetch('http://localhost:8080/api/clinic/auth/verify-otp', {
+        method: 'POST',
+        credentials: 'include', // Important for receiving cookies
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          code: verificationCode
+        }),
+      });
 
-        if (response.ok) {
-          // Clear sessionStorage
-          sessionStorage.removeItem('loginEmail');
-          sessionStorage.removeItem('loginPassword');
-          sessionStorage.removeItem('verificationCode');
-          
-          // Login successful, redirect to dashboard using Next.js router
-          router.push('/clinic/dashboard');
-        } else {
-          const errorData = await response.json();
-          setError(errorData.message || 'Login failed. Please try again.');
-        }
+      if (response.ok) {
+        // Clear sessionStorage
+        sessionStorage.removeItem('loginEmail');
+        
+        // Login successful, redirect to dashboard
+        router.push('/dashboard');
       } else {
-        setError('Invalid verification code. Please check your email and try again.');
+        const errorData = await response.text();
+        setError(errorData || 'Invalid verification code. Please try again.');
       }
     } catch (error) {
       setError('Network error. Please try again.');
@@ -93,61 +80,16 @@ export default function VerificationPage() {
   };
 
   /**
-   * Resends the verification code.
+   * Resends the verification code by going back to login.
    */
   const handleResend = async () => {
     setResendLoading(true);
     setError('');
 
     try {
-      const emailjs = (await import('@emailjs/browser')).default;
-      
-      // Generate new verification code
-      const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      // Create a temporary form to send the email
-      const tempForm = document.createElement('form');
-      
-      const emailInput = document.createElement('input');
-      emailInput.type = 'hidden';
-      emailInput.name = 'email';
-      emailInput.value = email;
-      tempForm.appendChild(emailInput);
-      
-      // Add OTP with multiple variable names for compatibility
-      const otpInput = document.createElement('input');
-      otpInput.type = 'hidden';
-      otpInput.name = 'otp';
-      otpInput.value = newCode;
-      tempForm.appendChild(otpInput);
-      
-      const codeInput = document.createElement('input');
-      codeInput.type = 'hidden';
-      codeInput.name = 'verification_code';
-      codeInput.value = newCode;
-      tempForm.appendChild(codeInput);
-      
-      const messageInput = document.createElement('input');
-      messageInput.type = 'hidden';
-      messageInput.name = 'message';
-      messageInput.value = newCode;
-      tempForm.appendChild(messageInput);
-
-      const emailResponse = await emailjs.sendForm(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        tempForm,
-        {
-          publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-        }
-      );
-
-      if (emailResponse.status === 200) {
-        sessionStorage.setItem('verificationCode', newCode);
-        setStoredCode(newCode);
-        setVerificationCode('');
-        alert('Verification code has been resent to your email.');
-      }
+      // User needs to go back to login to resend (since we don't store password)
+      alert('Please go back to the login page to request a new code.');
+      router.push('/auth/login');
     } catch (error) {
       setError('Failed to resend verification code. Please try again.');
       console.error('Resend error:', error);
@@ -290,7 +232,7 @@ export default function VerificationPage() {
                 </button>
               </p>
               <p className="text-sm text-gray-600">
-                <Link href="/clinic/auth/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
+                <Link href="/auth/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
                   Back to Login
                 </Link>
               </p>
