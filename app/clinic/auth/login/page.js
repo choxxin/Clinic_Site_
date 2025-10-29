@@ -56,7 +56,7 @@ export default function LoginPage() {
         sessionStorage.setItem('loginEmail', formData.email);
         
         // Redirect to verification page
-        router.push('/auth/login/verification');
+        router.push('/clinic/auth/login/verification');
       } else {
         setError(data || 'Login failed. Please check your credentials.');
       }
@@ -240,7 +240,7 @@ export default function LoginPage() {
             >
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link href="/auth/register" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
+                <Link href="/clinic/auth/register" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
                   Sign up here
                 </Link>
               </p>

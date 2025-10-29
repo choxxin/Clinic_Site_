@@ -19,7 +19,7 @@ export default function VerificationPage() {
 
     if (!loginEmail) {
       // If no stored email, redirect back to login
-      router.push('/auth/login');
+      router.push('/clinic/auth/login');
       return;
     }
 
@@ -66,7 +66,7 @@ export default function VerificationPage() {
         sessionStorage.removeItem('loginEmail');
         
         // Login successful, redirect to dashboard
-        router.push('/dashboard');
+        router.push('/clinic/dashboard');
       } else {
         const errorData = await response.text();
         setError(errorData || 'Invalid verification code. Please try again.');
@@ -89,7 +89,7 @@ export default function VerificationPage() {
     try {
       // User needs to go back to login to resend (since we don't store password)
       alert('Please go back to the login page to request a new code.');
-      router.push('/auth/login');
+      router.push('/clinic/auth/login');
     } catch (error) {
       setError('Failed to resend verification code. Please try again.');
       console.error('Resend error:', error);
@@ -232,7 +232,7 @@ export default function VerificationPage() {
                 </button>
               </p>
               <p className="text-sm text-gray-600">
-                <Link href="/auth/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
+                <Link href="/clinic/auth/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors hover:underline">
                   Back to Login
                 </Link>
               </p>
