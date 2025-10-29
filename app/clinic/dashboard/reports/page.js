@@ -1,6 +1,6 @@
 'use client';
 
-import DashboardLayout from '../../../components/DashboardLayout';
+import DashboardLayout from '../../../../components/DashboardLayout';
 import { FileText } from 'lucide-react';
 
 export default function ReportsPage() {

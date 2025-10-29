@@ -1,6 +1,6 @@
 'use client';
 
-import DashboardLayout from '../../../components/DashboardLayout';
+import DashboardLayout from '../../../../components/DashboardLayout';
 import { Users } from 'lucide-react';
 
 export default function PatientsPage() {

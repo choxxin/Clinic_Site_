@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import DashboardLayout from '../../../components/DashboardLayout';
-import AppointmentCard from '../../../components/AppointmentCard';
-import AppointmentDetailModal from '../../../components/AppointmentDetailModal';
+import DashboardLayout from '../../../../components/DashboardLayout';
+import AppointmentCard from '../../../../components/AppointmentCard';
+import AppointmentDetailModal from '../../../../components/AppointmentDetailModal';
 import { Calendar, Clock, CheckCircle, XCircle, Hourglass, List } from 'lucide-react';
 
 export default function AppointmentsPage() {

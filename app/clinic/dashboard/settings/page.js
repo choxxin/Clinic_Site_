@@ -1,6 +1,6 @@
 'use client';
 
-import DashboardLayout from '../../../components/DashboardLayout';
+import DashboardLayout from '../../../../components/DashboardLayout';
 import { Settings as SettingsIcon } from 'lucide-react';
 
 export default function SettingsPage() {
