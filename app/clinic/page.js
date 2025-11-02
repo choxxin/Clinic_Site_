@@ -8,40 +8,53 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is already logged in by checking localStorage flag
-    // and then verify with server if needed
+    // Always verify authentication with server via /me (don't rely on localStorage flag)
     const checkAuthStatus = async () => {
-      const userLoggedIn = localStorage.getItem('user_logged_in');
-      
-      if (userLoggedIn) {
-        try {
-          // Verify with server using HttpOnly cookie
-          const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/verify', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+      try {
+        // Verify with server using HttpOnly cookie
+        const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/me', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-          if (response.ok) {
-            // User is authenticated, redirect to dashboard
-            router.push('/clinic/dashboard');
-          } else {
-            // Clear invalid state
+        if (response.ok) {
+          // User is authenticated, validate response body and redirect to dashboard
+          try {
+            const data = await response.json();
+            // Expecting an object like { id: 9, name: ... }
+            if (data && data.id) {
+              router.push('/clinic/dashboard');
+            } else {
+              // Unexpected body, treat as unauthenticated
+              localStorage.removeItem('user_logged_in');
+              localStorage.removeItem('clinic_token');
+              router.push('/clinic/auth/login');
+            }
+          } catch (e) {
+            // Parsing error: treat as unauthenticated
             localStorage.removeItem('user_logged_in');
             localStorage.removeItem('clinic_token');
+            router.push('/clinic/auth/login');
           }
-        } catch (error) {
-          console.error('Auth verification failed:', error);
-          // Clear invalid state
+        } else {
+          // Clear invalid state and redirect to login
           localStorage.removeItem('user_logged_in');
           localStorage.removeItem('clinic_token');
+          router.push('/clinic/auth/login');
         }
+      } catch (error) {
+        console.error('Auth verification failed:', error);
+        // Clear invalid state and redirect to login
+        localStorage.removeItem('user_logged_in');
+        localStorage.removeItem('clinic_token');
+        router.push('/clinic/auth/login');
       }
-    };
+  };
 
-    checkAuthStatus();
+  checkAuthStatus();
   }, [router]);
 
   return (
