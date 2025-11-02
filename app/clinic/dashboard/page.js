@@ -35,7 +35,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/clinic/appointments/all', {
+        const response = await fetch('http://48.217.187.147:8080/api/clinic/appointments/all', {
           method: 'GET',
           credentials: 'include', // Include HttpOnly cookies
           headers: {
@@ -140,7 +140,7 @@ export default function Dashboard() {
         requestData.allergies = allergies.map(allergy => ({ allergyName: allergy }));
       }
 
-      const response = await fetch('http://localhost:8080/api/patient/auth/register', {
+      const response = await fetch('http://48.217.187.147:8080/api/patient/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

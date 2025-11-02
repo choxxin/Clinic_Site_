@@ -71,7 +71,7 @@ export default function AppointmentDetailModal({ appointment, isOpen, onClose, o
       uploadFormData.append('file', selectedFile);
 
       const response = await fetch(
-        `http://localhost:8080/api/clinic/appointments/upload-report/${appointment.id}`,
+        `http://48.217.187.147:8080/api/clinic/appointments/upload-report/${appointment.id}`,
         {
           method: 'POST',
           credentials: 'include',
@@ -117,7 +117,7 @@ export default function AppointmentDetailModal({ appointment, isOpen, onClose, o
       };
 
       const response = await fetch(
-        `http://localhost:8080/api/clinic/appointments/update/${appointment.id}`,
+        `http://48.217.187.147:8080/api/clinic/appointments/update/${appointment.id}`,
         {
           method: 'POST',
           credentials: 'include',

@@ -55,7 +55,7 @@ export default function RegisterPage() {
     try {
       const { confirmPassword, ...registrationData } = formData;
       
-      const response = await fetch('http://localhost:8080/api/clinic/auth/register', {
+      const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

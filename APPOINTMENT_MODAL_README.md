@@ -53,7 +53,7 @@ Comprehensive editing interface with the following sections:
 
 #### Upload Report
 ```
-POST http://localhost:8080/api/clinic/appointments/upload-report/{appointmentId}
+POST http://48.217.187.147:8080/api/clinic/appointments/upload-report/{appointmentId}
 Content-Type: multipart/form-data
 Body: FormData with 'file' field
 ```
@@ -65,7 +65,7 @@ Clinic report uploaded successfully. URL: https://vdocsstorage.blob.core.windows
 
 #### Update Appointment
 ```
-POST http://localhost:8080/api/clinic/appointments/update/{appointmentId}
+POST http://48.217.187.147:8080/api/clinic/appointments/update/{appointmentId}
 Content-Type: application/json
 
 Body:
