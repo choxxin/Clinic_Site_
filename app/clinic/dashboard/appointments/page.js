@@ -24,7 +24,7 @@ export default function AppointmentsPage() {
       setError('');
       
       try {
-        let endpoint = 'http://localhost:8080/api/clinic/appointments/';
+        let endpoint = 'http://48.217.187.147:8080/api/clinic/appointments/';
         
         switch (activeFilter) {
           case 'pending':

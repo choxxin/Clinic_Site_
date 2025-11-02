@@ -27,7 +27,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8084/api/admin/auth/login', {
+      const response = await fetch('http://48.217.187.147:8084/api/admin/auth/login', {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -49,7 +49,7 @@ export default function VerificationPage() {
 
     try {
       // Call backend verify-otp endpoint
-      const response = await fetch('http://localhost:8080/api/clinic/auth/verify-otp', {
+      const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/verify-otp', {
         method: 'POST',
         credentials: 'include', // Important for receiving cookies
         headers: {

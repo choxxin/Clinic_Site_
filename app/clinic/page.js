@@ -16,7 +16,7 @@ export default function Home() {
       if (userLoggedIn) {
         try {
           // Verify with server using HttpOnly cookie
-          const response = await fetch('http://localhost:8080/api/clinic/auth/verify', {
+          const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/verify', {
             method: 'GET',
             credentials: 'include',
             headers: {

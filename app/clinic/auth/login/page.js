@@ -38,7 +38,7 @@ export default function LoginPage() {
 
     try {
       // Call backend login endpoint
-      const response = await fetch('http://localhost:8080/api/clinic/auth/login', {
+      const response = await fetch('http://48.217.187.147:8080/api/clinic/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ export default function AdminDashboard() {
       setError('');
 
       try {
-        const response = await fetch('http://localhost:8084/api/admin/action/clinics', {
+        const response = await fetch('http://48.217.187.147:8084/api/admin/action/clinics', {
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -91,8 +91,8 @@ export default function AdminDashboard() {
     try {
       // Use different endpoints based on current status
       const endpoint = currentStatus 
-        ? `http://localhost:8084/api/admin/action/deactivate/${clinicId}`
-        : `http://localhost:8084/api/admin/action/activate/${clinicId}`;
+        ? `http://48.217.187.147:8084/api/admin/action/deactivate/${clinicId}`
+        : `http://48.217.187.147:8084/api/admin/action/activate/${clinicId}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',

@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }) {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:8080/api/clinic/auth/logout', {
+      await fetch('http://48.217.187.147:8080/api/clinic/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });

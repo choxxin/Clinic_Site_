@@ -38,12 +38,12 @@ The dashboard now includes a responsive sidebar navigation with a hamburger menu
 ## API Endpoints Used
 
 ```
-GET http://localhost:8080/api/clinic/appointments/all
-GET http://localhost:8080/api/clinic/appointments/pending
-GET http://localhost:8080/api/clinic/appointments/confirmed
-GET http://localhost:8080/api/clinic/appointments/completed
-GET http://localhost:8080/api/clinic/appointments/cancelled
-POST http://localhost:8080/api/clinic/auth/logout
+GET http://48.217.187.147:8080/api/clinic/appointments/all
+GET http://48.217.187.147:8080/api/clinic/appointments/pending
+GET http://48.217.187.147:8080/api/clinic/appointments/confirmed
+GET http://48.217.187.147:8080/api/clinic/appointments/completed
+GET http://48.217.187.147:8080/api/clinic/appointments/cancelled
+POST http://48.217.187.147:8080/api/clinic/auth/logout
 ```
 
 ## Navigation Structure
